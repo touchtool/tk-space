@@ -3,9 +3,11 @@ from random import randint
 
 from gamelib import Sprite, GameApp, Text
 
+
 from consts import *
 
 from utils import direction_to_dxdy, distance
+
 
 class FixedDirectionSprite(Sprite):
     def __init__(self, app, image_filename, x, y, vx, vy):

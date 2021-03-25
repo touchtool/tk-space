@@ -1,8 +1,10 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from random import *
 from abc import ABC, abstractmethod
 from utils import distance
+
 
 class GameElement(ABC):
 
@@ -21,6 +23,7 @@ class GameElement(ABC):
     @abstractmethod
     def delete(self):
         pass
+
 
 class GameCanvasElement(GameElement):
     def __init__(self, game_app, x=0, y=0):
@@ -64,6 +67,7 @@ class GameCanvasElement(GameElement):
 
     def update(self):
         pass
+
 
 class Text(GameCanvasElement):
     def __init__(self, game_app, text, x=0, y=0):
@@ -114,13 +118,17 @@ class GameApp(ttk.Frame):
 
         self.parent.bind('<KeyPress>', self.on_key_pressed)
         self.parent.bind('<KeyRelease>', self.on_key_released)
-        
+
+        self.key_pressed_handler = KeyboardHandler()
+        self.key_released_handler = KeyboardHandler()
+
+        self.init_game()
+
     def create_canvas(self):
         self.canvas = tk.Canvas(self, borderwidth=0,
             width=self.canvas_width, height=self.canvas_height, 
             highlightthickness=0)
         self.canvas.grid(sticky="news")
-
 
     def stop_animation(self):
         self.is_stopped = True
@@ -161,7 +169,16 @@ class GameApp(ttk.Frame):
         pass
 
     def on_key_pressed(self, event):
-        pass
+        self.key_pressed_handler.handle(event)
 
     def on_key_released(self, event):
-        pass
+        self.key_released_handler.handle(event)
+
+
+class KeyboardHandler:
+    def __init__(self, successor=None):
+        self.successor = successor
+
+    def handle(self, event):
+        if self.successor:
+            self.successor.handle(event)

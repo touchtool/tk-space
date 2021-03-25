@@ -3,6 +3,7 @@ from random import randint
 
 from consts import *
 
+
 def direction_to_dxdy(direction):
     return (math.cos(direction * math.pi / 180), 
         math.sin(direction * math.pi / 180))
