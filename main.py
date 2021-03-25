@@ -1,5 +1,4 @@
 import math
-import threading
 from random import randint, random
 
 import tkinter as tk
@@ -58,7 +57,7 @@ class GameKeyboardHandler(KeyboardHandler):
     def handle(self, event):
         if event.char.upper() == 'Z':
             self.game_app.bomb()
-        else:  #
+        else:                                     #
             super().handle(event)
 
 
@@ -86,7 +85,7 @@ class BombKeyPressedHandler(GameKeyboardHandler):
     def handle(self, event):
         if event.char.upper() == 'Z':
             self.game_app.bomb()
-        else:  #
+        else:                                     #
             super().handle(event)
 
 
@@ -112,36 +111,12 @@ class StatusWithText:
         self.label_text.set_text(self.text_template % self.value)
 
 
-class Bomberman:
-    @abstractmethod
-    def __init__(self, game_app, ship, enemy, bomb_power):
-        self.bomb_power = bomb_power
-        self.ship = ship
-        self.canvas = game_app.canvas
-        self.enemies = enemy
-
-    def draw_bomb_hit(self):
-        self.bomb_canvas_id = self.canvas.create_oval(
-            self.ship.x - BOMB_RADIUS,
-            self.ship.y - BOMB_RADIUS,
-            self.ship.x + BOMB_RADIUS,
-            self.ship.y + BOMB_RADIUS
-        )
-
-    def destroyer_bomb(self):
-        for e in self.enemies:
-            if self.ship.distance_to(e) <= BOMB_RADIUS:
-                e.to_be_deleted = True
-
-    def update_bomb(self):
-        self.canvas.after(200, lambda: self.canvas.delete(self.bomb_canvas_id))
-
-
 class SpaceGame(GameApp):
     def init_game(self):
         self.ship = Ship(self, CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2)
 
         self.level = StatusWithText(self, 100, 580, 'Level: %d', 1)
+
 
         self.score_wait = 0
         # --- remove this
@@ -198,12 +173,6 @@ class SpaceGame(GameApp):
         if self.bomb_power == BOMB_FULL_POWER:
             self.bomb_power = 0
 
-
-            self.bomb_create = Bomberman(self, self.ship, self.enemies, 0)
-            self.bomb_create.draw_bomb_hit()
-            self.bomb_create.update_bomb()
-            self.bomb_create.destroyer_bomb()
-
             self.bomb_canvas_id = self.canvas.create_oval(
                 self.ship.x - BOMB_RADIUS, 
                 self.ship.y - BOMB_RADIUS,
@@ -216,7 +185,6 @@ class SpaceGame(GameApp):
             for e in self.enemies:
                 if self.ship.distance_to(e) <= BOMB_RADIUS:
                     e.to_be_deleted = True
-
 
 
     def update_score(self):
@@ -290,7 +258,7 @@ class SpaceGame(GameApp):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Space Fighter")
-
+ 
     # do not allow window resizing
     root.resizable(False, False)
     app = SpaceGame(root, CANVAS_WIDTH, CANVAS_HEIGHT, UPDATE_DELAY)
