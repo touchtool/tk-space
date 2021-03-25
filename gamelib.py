@@ -83,7 +83,7 @@ class Text(GameCanvasElement):
     def set_text(self, text):
         self.text = text
         self.canvas.itemconfigure(self.canvas_object_id, text=text)
-        
+
 
 class Sprite(GameCanvasElement):
     def __init__(self, game_app, image_filename, x=0, y=0):
@@ -112,7 +112,6 @@ class GameApp(ttk.Frame):
         self.create_canvas()
 
         self.elements = []
-        self.init_game()
 
         self.is_stopped = False
 
