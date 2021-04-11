@@ -157,8 +157,8 @@ class SpaceGame(GameApp):
         self.elements.append(self.ship)
 
         self.enemy_creation_strategies = [
-            (0.2, StarEnemyGenerationStrategy()),
-            (1.0, EdgeEnemyGenerationStrategy())
+            [0.2, StarEnemyGenerationStrategy()],
+            [1.0, EdgeEnemyGenerationStrategy()]
         ]
 
         self.enemies = []
@@ -208,6 +208,13 @@ class SpaceGame(GameApp):
             self.score.value += 1
 
             self.score_wait = 0
+        for i in range(1, 1000):
+            if self.score.value == 25*i:
+                self.enemy_creation_strategies[0][0] = 0.2*i
+                self.update_lv()
+
+    def update_lv(self):
+        self.level.value += 0.1
 
     def update_bomb_power(self):
         self.bomb_wait += 1
@@ -244,9 +251,20 @@ class SpaceGame(GameApp):
             if self.ship.is_colliding_with_enemy(e):
                 self.stop_animation()
 
+    def process_ship_collide_corner(self):
+        if self.ship.x >= CANVAS_WIDTH:
+            self.stop_animation()
+        elif self.ship.y >= CANVAS_HEIGHT:
+            self.stop_animation()
+        elif self.ship.x <= 0:
+            self.stop_animation()
+        elif self.ship.y <= 0:
+            self.stop_animation()
+
     def process_collisions(self):
         self.process_bullet_enemy_collisions()
         self.process_ship_enemy_collision()
+        self.process_ship_collide_corner()
 
     def update_and_filter_deleted(self, elements):
         new_list = []

@@ -47,7 +47,7 @@ class Ship(Sprite):
         self.is_turning_right = False
 
     def update(self):
-        dx,dy = direction_to_dxdy(self.direction)
+        dx, dy = direction_to_dxdy(self.direction)
 
         self.x += dx * SHIP_SPEED
         self.y += dy * SHIP_SPEED
